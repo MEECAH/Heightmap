@@ -5,9 +5,6 @@ public class main {
 
     public static void main(String[] args) throws Exception {
 
-        //these final variables are the coordinates which define the pre-determined bounds of the quadtree
-        //these numbers taken from approx 1000m points to the bottom left and top right corners
-        //of a rectangle surrounding the test flight on google maps
         final double minX = 32.62507;
         final double minY = 35.0368;
         final double maxX = 32.64108;
@@ -19,16 +16,13 @@ public class main {
 
         Point<Integer>[] foundPoints; // this is for storing the results of Quadtree's searchWithin method
 
-        //PriorityQueue<Point<Integer>> nearestPoints = new PriorityQueue<Point<Integer>>(4, Comparator.comparingDouble(Point::getDistance)); //this is for keeping the four closest points found
-
         File file = new File("restrictedHeightMap.txt"); //originally read from N032E035_converted.txt
 
         Scanner sc = new Scanner(file);
 
         String s;
 
-        double x;
-        double y;
+        double x, y;
         int z;
 
         //old code used to generated restrictedHeightMap.txt
@@ -86,13 +80,13 @@ public class main {
         //old code used for testing quadtree construction
         //---------------------------------------------------------------------------------------------
 
-        System.out.println(q.getCount());
+/*        System.out.println(q.getCount());
         System.out.println();
         System.out.println(q.getValues());
         System.out.println();
         System.out.println("testing, the next line should print 204");
         System.out.println(q.get(32.62513888888892,35.057916666666635,null));
-        System.out.println();
+        System.out.println();*/
 
         double[] boxCoordinates = q.generateBoundaryBox(sampleX,sampleY);
         foundPoints = q.searchWithin(boxCoordinates[0],boxCoordinates[1],boxCoordinates[2],boxCoordinates[3]);
@@ -101,9 +95,9 @@ public class main {
             p.distance(sampleX,p.getX(),sampleY,p.getY());
         }
 
-        weightedAverage wa = new weightedAverage();
-        int WA = wa.calculateWA(foundPoints);
-        System.out.print(WA);
+        WeightedAverageCalculator wa = new WeightedAverageCalculator(foundPoints);
+        int wAvg = wa.calculateWA();
+        System.out.println(wAvg);
     }
 
 }
